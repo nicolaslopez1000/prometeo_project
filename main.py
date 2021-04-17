@@ -5,6 +5,7 @@ from pprint import pprint as pp
 from lxml import html
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
+import datetime
 
 load_dotenv()
 
@@ -70,8 +71,11 @@ class PrometeoAPI:
         #requests_mes_element = tree.xpath("//p[contains(.,'Requests este mes:')]/b")[0]
         #self.requests_mes = str(requests_mes_element.text_content()).strip()
 
-    def get_requests_month(self):
-        request_url = 'https://prometeoapi.com/dashboard/filter_requests/?format=json&month=4&user_id=&year=2021'
+    def get_requests_current_month(self):
+
+        current_date = datetime.datetime.now()
+
+        request_url = f'https://prometeoapi.com/dashboard/filter_requests/?format=json&month={current_date.month}&user_id=&year={current_date.year}'
         response = self.session.get(request_url)
 
         if response.status_code == 200:
@@ -99,4 +103,4 @@ if __name__ == '__main__':
     print(api.api_key)
     print(api.username)
     print(api.refresh_api_key())
-    pp(api.get_requests_month())
+    pp(api.get_requests_current_month())
