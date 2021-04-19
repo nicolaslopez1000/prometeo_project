@@ -76,7 +76,7 @@ class PrometeoAPI:
 
         current_date = datetime.datetime.now()
 
-        request_url = f'https://prometeoapi.com/dashboard/filter_requests/?format=json&month={current_date.month}&user_id=&year={current_date.year}'
+        request_url = f'{self.base_url}/dashboard/filter_requests/?format=json&month={current_date.month}&user_id=&year={current_date.year}'
         response = self.session.get(request_url)
 
         if response.status_code == 200:
@@ -84,10 +84,10 @@ class PrometeoAPI:
             return json_table.get('usage_table')
 
     def refresh_api_key(self):
-        csrf = self._generate_csrf_token('https://prometeoapi.com/dashboard/')
+        csrf = self._generate_csrf_token(f'{self.base_url}/dashboard/')
         headers = {'X-CSRFToken': csrf}
 
-        request_url = 'https://prometeoapi.com/dashboard/reset-key/'
+        request_url = f'{self.base_url}/dashboard/reset-key/'
         response = self.session.post(request_url, headers=headers)
         self.api_key = response.json().get('api_key')
 
